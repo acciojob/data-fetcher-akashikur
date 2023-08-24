@@ -1,13 +1,30 @@
+import React, { useState, useEffect } from "react";
 
-import React from "react";
-import './../styles/App.css';
+function App() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-const App = () => {
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("https://dummyjson.com/products");
+      const data = await response.json();
+      setData(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
-        {/* Do not remove the main div */}
+      {loading ? <p>Loading...</p> : <pre>{JSON.stringify(data, null, 2)}</pre>}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
